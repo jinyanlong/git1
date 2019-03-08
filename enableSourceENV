@@ -1,0 +1,4 @@
+#!/bin/bash
+
+source /home/jyl/jyl-work/board/EC20/EC20-CHENGONG/firmware_SDK/EC20CEFAGR06A04M4G_OCPU_SDK/ql-ol-sdk/ql-ol-crosstool/ql-ol-crosstool-env-init
+
