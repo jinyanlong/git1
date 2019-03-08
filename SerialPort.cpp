@@ -32,14 +32,13 @@ void SerialPort::openSerialPort()
 
 	if (pthread_create(&thrd_uart_rcv, NULL, UartRecv_Proc, this) != 0)
 	{
-		cout<<"Fail to create uart thread!\n"
+		cout<<"Fail to create uart thread!\n";
 	}
 
 	while (fd_uart >=0)
 	{
 		string strTmp="Ec20 uart test\n";
 		iRet = Ql_UART_Write(fd_uart, strTmp.c_str(), strTmp.length());
-		cout<<"uart:"<<fd_uart<< ",result:"<<iRet;
 		sleep(1);
 	}
 }
@@ -51,6 +50,7 @@ void SerialPort::writeData()
 
 void* SerialPort::UartCallback()
 {
+	cout<<"uart thread UartCallback!\n";
 	int iRet;
 	fd_set fdset;
 	struct timeval timeout = {3, 0};	// timeout 3s
@@ -63,12 +63,12 @@ void* SerialPort::UartCallback()
 		iRet = select(fd_uart + 1, &fdset, NULL, NULL, &timeout);
 		if (-1 == iRet)
 		{
-			//printf("< failed to select >\n");
+			cout<<"uart failed to select"<<endl;
 			exit(-1);
 		}
 		else if (0 == iRet)
 		{// no data in Rx buffer
-			//printf("< no data >\n");
+			cout<<"uart no data"<<endl;
 			timeout.tv_sec  = 3;
 			timeout.tv_usec = 0;
 		}
@@ -79,7 +79,7 @@ void* SerialPort::UartCallback()
 				do {
 					memset(buffer, 0x0, sizeof(buffer));
 					iRet = Ql_UART_Read(fd_uart, buffer, 100);
-					//printf("uart read(uart)=%d:%s\n", iRet, buffer);
+					cout<<"uart receive data:"<<buffer<<". iRet:"<<iRet<<endl;
 				} while (100 == iRet);
 			}
 		}
